@@ -10,7 +10,7 @@ public class DBConn {
 		//드라이브로딩
 		static {
 			try {
-				Class.forName("com.mysql.cj.jdbd.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -22,7 +22,7 @@ public class DBConn {
 		protected String sql = null;
 		protected final String URL = "jdbc:mysql://@127.0.0.1/multi";
 		protected final String DB_ID = "root";
-		protected final String DB_PWD = "root1234";
+		protected final String DB_PWD = "tjsanfgka@2517A";
 		
 		//DB연결
 		protected void getConn() {
