@@ -17,7 +17,7 @@ public class EmpDAO extends DBConn{
 	//Select를 작업 ResultSet -<안에 데이터 베이스에서 작업한 테이블이 있다.
 	
 	//회원목록
-	public List<EmpVO> empSelect() { // list를 리턴
+	public List<EmpVO> empSelect(String searchWord) { // list를 리턴
 		//Arraylist
 		List<EmpVO> list = new ArrayList<EmpVO>();
 		
@@ -25,8 +25,23 @@ public class EmpDAO extends DBConn{
 			//1.제일 먼저 DB 연결해야한다. 
 			getConn();
 			
-			sql = "select mem_id, username, depart, phone, email from member order by mem_id";
+			sql = "select mem_id, username, depart, phone, email from member"; 
+			if(searchWord != null) {
+				sql += " where username like ? ";
+			}
+			sql += " order by mem_id ";
+			
+			//select mem_id, username, depart, phone, email from member order by mem_id;
+			//select mem_id, username, depart, phone, email from member where username='' order by mem_id;
+
 			pstmt = conn.prepareStatement(sql);
+			
+			if(searchWord != null) {
+				pstmt.setString(1, "%"+searchWord+"%");
+			}
+			System.out.println(sql);
+			////////////////////////////
+			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				//회원을 VO에 담기
@@ -58,7 +73,7 @@ public class EmpDAO extends DBConn{
 			//+ "phone, meail) values(?,?,?,?,?)"; // 이거 쿼리 문이다.오라클에서 사용 
 			
 			sql = "insert into member(mem_id, username, depart," // ,때문에 자동으로 구분이 된다.
-			+ "phone, meail) values(?,?,?,?,?)"; // 이거 쿼리 문이다.오라클에서 사용 
+			+ "phone, email) values(?,?,?,?,?)"; // 이거 쿼리 문이다.오라클에서 사용 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, vo.getMem_id());
 			pstmt.setString(2, vo.getUsername());
@@ -94,5 +109,19 @@ public class EmpDAO extends DBConn{
 	}
 	
 	//회원삭제
-	
+	public int empDelete(int mem_id) {
+		int result =0;
+		try {
+			getConn();
+			sql = "delete from member where mem_id=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, mem_id);
+			
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
