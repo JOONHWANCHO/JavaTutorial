@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class EmpStart {
 	Scanner s = new Scanner(System.in);
+	EmpDAO dao = new EmpDAO();
 	public EmpStart() {
 		start();
 	}
@@ -20,10 +21,13 @@ public class EmpStart {
 				}else if(menu.equals("3")) {//회원수정
 					empEdit();
 				}else if(menu.equals("4")) {//회원삭제
-					
+					empDel();
 				}else if(menu.equals("5")) {//프로그램 종료
 					EmpClose();
+				}else if(menu.equals("6")) {//회원검색
+					empSearch();
 				}
+				
 			}catch(Exception e) {
 				System.out.println("잘못된 정보가 입력되었습니다.");
 			}
@@ -31,6 +35,53 @@ public class EmpStart {
 		}while(true);
 		
 	}
+	//회원검색
+	public void empSearch() {
+		System.out.print("검색어->");
+		String searchWord = s.nextLine();// 검색어가 여기에 있다. 이 검색어를 -> List<EmpVO>에 보내준다. 
+		
+		empPrint(dao.empSelect(searchWord));
+		
+		//List<EmpVO> list = dao.empSelect(searchWord);
+		//여기에 있는 것을 출력할꺼다. 
+	}
+	
+	//회원목록
+	public void empList() {
+		//회원목록 DB에서 선택할수 있게 메소드를 호출
+		//EmpDAO dao =EmpDAO.getInstance();
+		//EmpDAO dao = new EmpDAO(); -< 이렇게도 가능하다. 
+		
+		//EmpDAO를 맏늘어 주고 삽입 
+		String searchWord = null;
+		empPrint(dao.empSelect(searchWord));
+		//List<EmpVO> list = dao.empSelect();
+
+	}
+	//목록 출력 메소드
+	public void empPrint(List<EmpVO> list) {
+		for(int i=0; i<list.size(); i++) {
+			EmpVO vo = list.get(i);
+			System.out.printf("%6d %12s %10s %16s %20s\n", 
+					vo.getMem_id(), vo.getUsername(), vo.getDepart(), vo.getPhone(), vo.getEmail());
+			//최환되는 값들은 vo에 저장된다.
+		}
+	}
+	
+	//회원정보 삭제
+	public void empDel() {
+		System.out.print("삭제할 회원번호->");
+		int mem_id = Integer.parseInt(s.nextLine());
+		EmpDAO dao = new EmpDAO();
+		int result = dao.empDelete(mem_id);
+		if(result >0) {
+			System.out.println(mem_id+"회원이 삭제되었습니다.");
+		}else {
+			System.out.println(mem_id+"회원 삭제가 실패하였습니다.");
+		}
+		
+	}
+	
 	//회원정보 수정 
 	public void empEdit() {
 		EmpVO vo = new EmpVO();
@@ -53,7 +104,7 @@ public class EmpStart {
 			vo.setPhone(s.nextLine());
 		
 			EmpDAO dao = EmpDAO.getInstance();
-			int cnt = dao.empUpdate(); // 필드네임, 수정할 값 3개가 들어가 있다. 
+			int cnt = dao.empUpdate(vo); // 필드네임, 수정할 값 3개가 들어가 있다. 
 			if(cnt>0) {
 				System.out.println(vo.getPhone()+"으로 수정되었습니다.");
 			}else {
@@ -91,20 +142,6 @@ public class EmpStart {
 		}
 	}
 	
-	public void empList() {
-		//회원목록 DB에서 선택할수 있게 메소드를 호출
-		EmpDAO dao =EmpDAO.getInstance();
-		//EmpDAO dao = new EmpDAO(); -< 이렇게도 가능하다. 
-		
-		//EmpDAO를 맏늘어 주고 삽입 
-		List<EmpVO> list = dao.empSelect();
-		for(int i=0; i<list.size(); i++) {
-			EmpVO vo = list.get(i);
-			System.out.printf("%6d %12s %10s %16s %20s\n", 
-					vo.getMem_id(), vo.getUsername(), vo.getDepart(), vo.getPhone(), vo.getEmail());
-			//최환되는 값들은 vo에 저장된다.
-		}
-	}
 	//종료
 	public void EmpClose() {
 		System.exit(0);
@@ -112,7 +149,7 @@ public class EmpStart {
 	
 	//메뉴
 	public String menuShow() {
-		System.out.print("메뉴[1.회원목록, 2.회원등록, 3.회원수정, 4.회원삭제, 5.종료]->");
+		System.out.print("메뉴[1.회원목록, 2.회원등록, 3.회원수정, 4.회원삭제, 5.종료, 6.검색]->");
 		//메뉴 입력
 		return s.nextLine();
 	}
