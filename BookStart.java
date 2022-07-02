@@ -11,26 +11,7 @@ import module.BookDataSet;
 import module.BookVO;
 
 public class BookStart {
-/*
-메인 화면 -> 메뉴 나오고 작업
 
-	1.책 목록 
-	2.책 등록 
-	3.책 수정 
-	4.책 삭제 
-	5.책 검색->책 정보 입력받아 정보 출력 
-	6.책 종료
-
-메뉴 나오고 작업
-
-	책코드=
-	책이름=
-	작가=
-	출판사=
-	가격=
-	출판년도=
-	*/
-	
 	Scanner scan = new Scanner(System.in);
 	
 	public BookStart() {
@@ -192,3 +173,25 @@ public class BookStart {
 	}
 
 }
+
+
+/*
+메인 화면 -> 메뉴 나오고 작업
+
+	1.책 목록 
+	2.책 등록 
+	3.책 수정 
+	4.책 삭제 
+	5.책 검색->책 정보 입력받아 정보 출력 
+	6.책 종료
+
+메뉴 나오고 작업
+
+	책코드=
+	책이름=
+	작가=
+	출판사=
+	가격=
+	출판년도=
+	*/
+	
